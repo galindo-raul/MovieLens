@@ -17,6 +17,28 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+## Table of Contents
+
+1. Introduction
+   + Objective
+   + Data description
+   + Downloading data
+2. Methods/Analysis
+   + Data Wrangling
+   + Splitting Data
+   + Data exploration and visualization
+   + Creating a model
+     + Model 1: Average rating
+     + Model 2: Movie Effect
+     + Model 3: Movie & User Effect
+   + Regularization, Penalized Least Squares
+     + Model 4: Movie & User Effect with Regularization
+     + Model 5: Movie, User Effect, Year Release and Genres with Regularization
+3. Results
+4. Conclusion
+     
+\newpage
 ## 1. Introduction
 
 We will create a movie recommendation system by using [MovieLens dataset](https://grouplens.org/datasets/movielens/). It was created in 1997 by GroupLens Research. It is a web-based recommender system that recommends movies for users to watch, based on the users’ preferences. It contains about 11 million ratings for about 8500 movies. 
@@ -174,12 +196,16 @@ Users tend to rate higher than lower, the most common rates are 4,3,5, the less 
 # Rating distribution
 tab <- edx %>% count(rating) %>% mutate(proportion = n/sum(n))
 # Ordering by proportion
-tab %>% arrange(desc(proportion)) %>%
-  kable(booktabs = T) %>%
-  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
+
 summary(edx$rating) 
 ```
 
+```{r rating_proportion_list, eval=FALSE, include=FALSE}
+# Ordering by proportion
+tab %>% arrange(desc(proportion)) %>%
+  kable(booktabs = T) %>%
+  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
+```
 The below graph shows the rating distribution
 ```{r rating_distribution}
 # Visualizing rating distribution
@@ -531,7 +557,7 @@ rmse_results <- bind_rows(rmse_results,
 ## 3. Results
 Below we can see RMSE values of the five models, we have achieved the best result with four features (movie, user, year release and genres) using regularization.  
 
-```{r results}
+```{r results, eval=FALSE, include=FALSE}
 # Printing RMSE
 rmse_results %>% 
   kable(booktabs = T) %>%
