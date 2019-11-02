@@ -163,14 +163,14 @@ ratings %>% summarize(n_users = n_distinct(userId))
 
 Let's check the data structure of edx and validation datasets
 
-```{r datasets_structure, echo=TRUE, message=FALSE, warning=FALSE}
+```{r datasets_structure}
 #data structure
 glimpse(edx)
 glimpse(validation)
 ```
 
 edx dataset is 90% of movilens and contains samples of all the movies and users
-```{r sizing, echo=TRUE, message=FALSE, warning=FALSE}
+```{r sizing}
 # number of users, movies, genres and ratings of movielens and edx
 movielens %>% summarize(n_users = n_distinct(userId),
                         n_movies = n_distinct(movieId),
@@ -200,7 +200,7 @@ tab <- edx %>% count(rating) %>% mutate(proportion = n/sum(n))
 summary(edx$rating) 
 ```
 
-```{r rating_proportion_list, eval=FALSE, include=FALSE}
+```{r rating_proportion_list}
 # Ordering by proportion
 tab %>% arrange(desc(proportion)) %>%
   kable(booktabs = T) %>%
@@ -557,7 +557,7 @@ rmse_results <- bind_rows(rmse_results,
 ## 3. Results
 Below we can see RMSE values of the five models, we have achieved the best result with four features (movie, user, year release and genres) using regularization.  
 
-```{r results, eval=FALSE, include=FALSE}
+```{r results}
 # Printing RMSE
 rmse_results %>% 
   kable(booktabs = T) %>%
