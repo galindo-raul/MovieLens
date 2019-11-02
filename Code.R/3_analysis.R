@@ -32,17 +32,18 @@ edx %>% summarize(n_users = n_distinct(userId),
                   n_ratings = n())
 
 #first 10 obs, there might be more than one genre per movie
-edx %>% slice(1:10) 
+movies %>% slice(1:10) 
 
 # Movies with no rating
 anti_join(movies,ratings) 
 
 # Rating distribution
 tab <- edx %>% count(rating) %>% mutate(proportion = n/sum(n))
-tab %>% knitr::kable()
-
-tab %>% arrange(desc(proportion))
-summary(edx$rating)
+# Ordering by proportion
+tab %>% arrange(desc(proportion)) %>%
+  kable(booktabs = T) %>%
+  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
+summary(edx$rating) 
 
 # Visualizing rating distribution
 tab %>%
@@ -295,7 +296,9 @@ rmse_results <- bind_rows(rmse_results,
                                      RMSE = model_5_rmse))
 
 # Printing RMSE
-rmse_results %>% knitr::kable()
+rmse_results %>% 
+  kable(booktabs = T) %>%
+  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
 
 # % Improvement from model 1 to model 5
 100*(1 - (rmse_results[5,2]/rmse_results[1,2]))

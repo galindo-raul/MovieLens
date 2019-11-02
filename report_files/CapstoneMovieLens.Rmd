@@ -7,12 +7,13 @@ output:
   html_document: default
   word_document: default
 ---
-
+ 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
-	warning = FALSE
+	warning = FALSE,
+	cache = TRUE
 )
 ```
 
@@ -162,9 +163,9 @@ edx %>% summarize(n_users = n_distinct(userId),
 ```
 
 A movie can belong to more than one genre
-```{r edx}
+```{r movies}
 #first 10 obs, there might be more than one genre per movie
-edx %>% slice(1:10) 
+movies %>% slice(1:10) 
 
 ```
 
@@ -172,10 +173,7 @@ Users tend to rate higher than lower, the most common rates are 4,3,5, the less 
 ```{r rating_proportion}
 # Rating distribution
 tab <- edx %>% count(rating) %>% mutate(proportion = n/sum(n))
-tab %>% 
-  kable(booktabs = T) %>%
-  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
-
+# Ordering by proportion
 tab %>% arrange(desc(proportion)) %>%
   kable(booktabs = T) %>%
   kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
