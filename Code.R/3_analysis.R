@@ -47,35 +47,16 @@ summary(edx$rating)
 # Visualizing rating distribution
 tab %>%
   ggplot(aes(rating,proportion)) +
-  geom_bar(fill="blue", color = "black", stat = "identity") +
+  geom_bar(color = "black", stat = "identity") +
   xlab("Rating") +
   ylab("Proportion") +
   ggtitle("Rating Distribution")
-
-# Breakdown movies into single genre per movie
-movie_genre <- movies %>% 
-  select(movieId, genres) %>% 
-  separate_rows(genres, sep ="\\|")
-
-# renaming genres
-names(movie_genre)[2] <- "genre"
-
-# Joining edx and movie_genre
-edx_genre <- left_join(edx, movie_genre) 
-
-# Listing genres
-unique(edx_genre$genre) %>% knitr::kable()
-
-# Ratings, movies and average rating per genre
-edx_genre %>% group_by(genre) %>% 
-  summarize(n_ratings = n(), n_movies = n_distinct(movieId), mean(rating)) %>% 
-  arrange(desc(n_ratings)) %>% knitr::kable()
 
 # Some users rate more movies than others
 # Distribution of Rating by Users
 edx %>% group_by(userId) %>% summarize(n = n()) %>%
   ggplot(aes(n)) + 
-  geom_histogram(binwidth=0.1, fill = "blue", color = "black") +
+  geom_histogram(binwidth=0.1, color = "black") +
   scale_x_log10() +
   xlab("Number of ratings") +
   ylab("Number of users") +
@@ -84,7 +65,7 @@ edx %>% group_by(userId) %>% summarize(n = n()) %>%
 # Some movies get rated more than others
 # Distribution of Rating by Movie
 edx %>% group_by(movieId) %>% summarize(n = n()) %>%
-  ggplot(aes(n)) + geom_histogram(binwidth=0.1, fill = "blue", color = "black") +
+  ggplot(aes(n)) + geom_histogram(binwidth=0.1, color = "black") +
   scale_x_log10() +
   xlab("Number of ratings") +
   ylab("Number of movies") +

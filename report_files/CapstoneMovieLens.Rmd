@@ -177,9 +177,10 @@ tab %>%
   kable(booktabs = T) %>%
   kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
 
-tab %>% arrange(desc(proportion))
-summary(edx$rating)
-
+tab %>% arrange(desc(proportion)) %>%
+  kable(booktabs = T) %>%
+  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
+summary(edx$rating) 
 ```
 
 The below graph shows the rating distribution
@@ -216,40 +217,6 @@ edx %>% group_by(movieId) %>% summarize(n = n()) %>%
   ggtitle("Ratings by Movie")
 ```
 
-To get a better understanding of edx, let's separate the feature genres to see how many unique genres there are
-To optimize the computation we will use an auxiliary dataset call movie_genre
-
-```{r edx_genre, eval=FALSE, include=FALSE}
-# first 10 obs, there might be more than one genre per movie
-# Breakdown movies into single genre per movie
-movie_genre <- movies %>% 
-  select(movieId, genres) %>% 
-  separate_rows(genres, sep ="\\|")
-
-# renaming genres
-names(movie_genre)[2] <- "genre"
-
-# Joining edx and movie_genre
-edx_genre <- left_join(edx, movie_genre) 
-
-# Listing genres
-unique(edx_genre$genre) %>% 
-  kable(booktabs = T) %>%
-  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
-```
-
-Let's see per each genre the number of ratings, movies and average rating
-```{r genre, eval=FALSE, include=FALSE}
-# Ratings, movies and average rating per genre
-edx_genre %>% group_by(genre) %>% 
-  summarize(n_ratings = n(), n_movies = n_distinct(movieId), mean(rating)) %>% 
-  arrange(desc(n_ratings)) %>% 
-  kable(booktabs = T) %>%
-  kable_styling( "latex", latex_options = "striped", full_width = "F", position = "left")
-```
-
-Keep in mind that one movie can belong to more than one genre,
-We can identify an outlier as there is one movie with no genre and only 7 ratings
 
 ### Creating a model
 The goal is create a model which RMSE <= 0.8649. 
@@ -394,7 +361,7 @@ Where:
 
 
 As $\lambda$ is a parameter, we will use cross-validation to choose the best lambda on the test set, remember that we can't use validation set for tuning parameters 
-```{r model_4_choose_lambda, eval=FALSE, include=FALSE}
+```{r model_4_choose_lambda}
 # We use cross-validaton to choose the parameter lambda
 lambdas <- seq(0, 10, 0.25)
 mu_hat <- mean(edx$rating) 
@@ -432,7 +399,7 @@ rmses[which.min(rmses)]
 ```
 
 Now, we apply the $\lambda$ which minimize RMSES on validation set
-```{r model_4, eval=FALSE, include=FALSE}
+```{r model_4}
 # Applying lambda on validation set
 b_i <- edx %>%
   group_by(movieId) %>%
@@ -473,7 +440,7 @@ Where:
 
 
 Cross-validation to pick a $\lambda$
-```{r model_5_choose_lambda, eval=FALSE, include=FALSE}
+```{r model_5_choose_lambda}
 lambdas <- seq(0, 10, 0.25)
 mu_hat <- mean(edx$rating) 
 
@@ -520,7 +487,7 @@ rmses[which.min(rmses)]
 ```
 
 Applying the $\lambda$ on validation set
-```{r model_5, eval=FALSE, include=FALSE}
+```{r model_5}
 # Applying lambda on validation set
 b_i <- edx %>%
   group_by(movieId) %>%
