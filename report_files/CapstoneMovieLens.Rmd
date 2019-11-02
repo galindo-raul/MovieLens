@@ -166,7 +166,7 @@ Let's check the data structure of edx and validation datasets
 ```{r datasets_structure}
 #data structure
 glimpse(edx)
-glimpse(validation)
+
 ```
 
 edx dataset is 90% of movilens and contains samples of all the movies and users
@@ -192,12 +192,13 @@ movies %>% slice(1:10)
 ```
 
 Users tend to rate higher than lower, the most common rates are 4,3,5, the less common ratings are 2.5, 1.5 and 0.5.
-```{r rating_proportion}
-# Rating distribution
-tab <- edx %>% count(rating) %>% mutate(proportion = n/sum(n))
-# Ordering by proportion
-
+```{r rating_analysis}
+# Summary
 summary(edx$rating) 
+
+# Adding proportion of rating
+tab <- edx %>% count(rating) %>% mutate(proportion = n/sum(n))
+
 ```
 
 ```{r rating_proportion_list}
@@ -356,7 +357,7 @@ predicted_ratings <- validation %>%
   mutate(pred = mu_hat + b_i + b_u) %>% 
   pull(pred)
 
-# RMSE of model 2
+# RMSE of model 3
 model_3_rmse <- RMSE(predicted_ratings, validation$rating)
 model_3_rmse
 
@@ -557,7 +558,7 @@ rmse_results <- bind_rows(rmse_results,
 ## 3. Results
 Below we can see RMSE values of the five models, we have achieved the best result with four features (movie, user, year release and genres) using regularization.  
 
-```{r results}
+```{r results, echo=FALSE}
 # Printing RMSE
 rmse_results %>% 
   kable(booktabs = T) %>%
